@@ -10,7 +10,6 @@ dataset_path = "dataset"
 if not os.path.exists(dataset_path):
     os.makedirs(dataset_path)
 
-# Configuración de la base de datos
 db_path = "users.db"
 
 def initialize_db():
@@ -26,7 +25,6 @@ def initialize_db():
     conn.commit()
     conn.close()
 
-# Función para registrar usuarios
 def register_user(username):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -43,14 +41,13 @@ def register_user(username):
             break
 
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        face_locations = face_recognition.face_locations(rgb_frame, model="hog")  # Detección de ubicaciones faciales
+        face_locations = face_recognition.face_locations(rgb_frame, model="hog")
 
         if face_locations:
-            # Generar codificaciones para cada rostro detectado
             face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
-            encodings.extend(face_encodings)  # Agregar todas las codificaciones
+            encodings.extend(face_encodings)  # Add all codifications
 
-            # Dibujar rectángulos en los rostros detectados
+            # Drawing vectors (squares or triangles)
             for (top, right, bottom, left) in face_locations:
                 count += 1
                 cv2.rectangle(frame, (left, top), (right, bottom), (255, 0, 0), 2)
@@ -64,7 +61,6 @@ def register_user(username):
     cv2.destroyAllWindows()
 
     if encodings:
-        # Promedia las codificaciones capturadas para crear una única representación
         average_encoding = np.mean(encodings, axis=0)
         cursor.execute("INSERT INTO users (username, encoding) VALUES (?, ?)",
                        (username, sqlite3.Binary(average_encoding.tobytes())))
@@ -74,7 +70,6 @@ def register_user(username):
         print("[ERROR] No se capturaron rostros válidos.")
     conn.close()
 
-# Función para iniciar sesión
 def login_user():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -95,10 +90,9 @@ def login_user():
             break
 
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        face_locations = face_recognition.face_locations(rgb_frame, model="hog")  # Detección de ubicaciones
+        face_locations = face_recognition.face_locations(rgb_frame, model="hog")  # detect locations
 
         if face_locations:
-            # Generar codificaciones para las caras detectadas
             face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
 
             for face_encoding, face_location in zip(face_encodings, face_locations):
@@ -123,10 +117,8 @@ def login_user():
     cap.release()
     cv2.destroyAllWindows()
 
-# Inicialización
 initialize_db()
 
-# Menú principal
 while True:
     print("1. Registrar Usuario")
     print("2. Iniciar Sesión")
