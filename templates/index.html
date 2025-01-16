@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Reconocimiento Facial</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Reconocimiento Facial</h1>
+
+        <div class="video-container">
+            <video id="video" autoplay></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+        </div>
+
+        <form id="register-form">
+            <h2>Registro</h2>
+            <input type="text" id="register-username" placeholder="Nombre de Usuario" required>
+            <button type="button" onclick="register()">Registrar</button>
+        </form>
+
+        <form id="login-form">
+            <h2>Inicio de Sesión</h2>
+            <button type="button" onclick="login()">Iniciar Sesión</button>
+        </form>
+
+        <div id="response"></div>
+    </div>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
